@@ -8,6 +8,13 @@
 #include "proc.h"
 
 int
+sys_numpp(void)
+{
+    struct proc *curproc = myproc();
+    return numpp(curproc); // Call the `numpp` function with the current process
+}
+
+int
 sys_fork(void)
 {
   return fork();
