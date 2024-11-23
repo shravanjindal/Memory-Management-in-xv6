@@ -13,6 +13,36 @@ sys_numpp(void)
     struct proc *curproc = myproc();
     return numpp(curproc); // Call the `numpp` function with the current process
 }
+int sys_numvp(void) {
+    struct proc *p = myproc();  // Get the current process
+    uint sz = p->sz;  // Get the program size (user space size)
+    
+    // Calculate the number of virtual pages
+    int num_pages = (sz + PGSIZE - 1) / PGSIZE;  // Round up to account for partial pages
+
+    // Add 1 to count the stack guard page
+    num_pages += 1; 
+
+    return num_pages;  // Return the total number of virtual pages
+}
+// sysproc.c
+int sys_mmap(void) {
+    int bytes;
+
+    // Get the argument for the mmap call
+    if (argint(0, &bytes) < 0 || bytes <= 0 || bytes % PGSIZE != 0) {
+        return 0;  // Return 0 for invalid input
+    }
+
+    struct proc *p = myproc();
+    uint oldsz = p->sz;
+    uint newsz = oldsz + bytes;
+
+    // Increase the virtual address space without allocating physical memory
+    p->sz = newsz;
+
+    return oldsz;  // Return the starting address of the newly added memory region
+}
 
 int
 sys_fork(void)

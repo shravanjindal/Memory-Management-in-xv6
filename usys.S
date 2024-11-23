@@ -30,4 +30,6 @@ SYSCALL(sbrk)
 SYSCALL(sleep)
 SYSCALL(uptime)
 SYSCALL(numpp)
+SYSCALL(numvp)
+SYSCALL(mmap)
 

@@ -23,7 +23,9 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
-int numpp(void);
+int numpp(void);    // Declare numpp function prototype
+int numvp(void);    // Declare numvp function prototype
+int mmap(int bytes);  // Declare mmap function prototype
 
 // ulib.c
 int stat(const char*, struct stat*);

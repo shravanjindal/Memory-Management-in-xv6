@@ -78,6 +78,35 @@ trap(struct trapframe *tf)
     lapiceoi();
     break;
 
+  case T_PGFLT: {
+    uint faulting_addr = rcr2();  // Get the faulting address from CR2 register
+    struct proc *p = myproc();
+
+    if(faulting_addr >= p->sz){
+      // Faulting address is beyond the process size; invalid memory access
+      cprintf("pid %d %s: trap %d err %d on cpu %d eip 0x%x addr 0x%x--kill proc\n",
+              p->pid, p->name, tf->trapno, tf->err, cpuid(), tf->eip, faulting_addr);
+      p->killed = 1;
+      break;
+    }
+
+    // Round down the faulting address to the page boundary
+    uint aligned_addr = PGROUNDDOWN(faulting_addr);
+
+    // Allocate a new physical page for the faulting address
+    if(allocuvm(p->pgdir, aligned_addr, aligned_addr + PGSIZE) == 0){
+      cprintf("pid %d %s: out of memory\n", p->pid, p->name);
+      p->killed = 1;
+      break;
+    }
+
+    // Update the page table and switch to the updated one
+    switchuvm(p);
+
+    // Page fault handled successfully; return to user process
+    return;
+  }
+
   //PAGEBREAK: 13
   default:
     if(myproc() == 0 || (tf->cs&3) == 0){

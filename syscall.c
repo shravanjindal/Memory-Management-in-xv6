@@ -103,10 +103,15 @@ extern int sys_unlink(void);
 extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
-extern int sys_numpp(void);
+extern int sys_numpp(void); // Adding the declaration
+extern int sys_mmap(void);  // Adding the declaration
+extern int sys_numvp(void); // Adding the declaration
+
 
 static int (*syscalls[])(void) = {
-[SYS_numpp] sys_numpp,
+[SYS_numpp]   sys_numpp,
+[SYS_numvp]   sys_numvp,
+[SYS_mmap]    sys_mmap,
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
 [SYS_wait]    sys_wait,
