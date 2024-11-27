@@ -4,6 +4,6 @@
 
 int main() {
     int num_physical_pages = numpp();
-    printf(1, "Initial Number of Physical Pages: %d\n", num_physical_pages);
+    printf(1, "Number of Physical Pages: %d\n", num_physical_pages);
     exit();
 }
