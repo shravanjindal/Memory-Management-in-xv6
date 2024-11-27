@@ -14,11 +14,12 @@ pde_t *kpgdir;  // for use in scheduler()
 int
 numpp(struct proc *p)
 {
-    pde_t *pgdir = p->pgdir; // Get the process's page directory
+    pde_t *pgdir = p->pgdir;  // Get the process's page directory
     int count = 0;
 
-    // Loop through the page directory entries
-    for (int i = 0; i < NPDENTRIES; i++) {
+    // Loop through only the valid entries in the page directory
+    // Assume the process uses the first N entries (e.g., 1024 MB for the user address space)
+    for (int i = 0; i < NPDENTRIES / 2; i++) {  // Loop over the first 2 GB or so (just an example)
         if (pgdir[i] & PTE_P) { // Check if the page directory entry is present
             pte_t *pgtab = (pte_t*)P2V(PTE_ADDR(pgdir[i])); // Get the page table
 
@@ -31,7 +32,7 @@ numpp(struct proc *p)
         }
     }
 
-    return count; // Return the count of physical pages
+    return count;  // Return the count of physical pages allocated to the current process
 }
 // Set up CPU's kernel segment descriptors.
 // Run once on entry on each CPU.
