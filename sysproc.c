@@ -15,14 +15,10 @@ sys_numpp(void)
 }
 int sys_numvp(void) {
     struct proc *p = myproc();  // Get the current process
-    uint sz = p->sz;  // Get the program size (user space size)
-    
     // Calculate the number of virtual pages
-    int num_pages = (sz + PGSIZE - 1) / PGSIZE;  // Round up to account for partial pages
-
+    int num_pages = PGROUNDUP(p->sz) / PGSIZE;  // Round up to account for partial pages
     // Add 1 to count the stack guard page
     num_pages += 1; 
-
     return num_pages;  // Return the total number of virtual pages
 }
 // sysproc.c
