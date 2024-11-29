@@ -16,6 +16,7 @@ sys_numpp(void)
 }
 int sys_numvp(void) {
     struct proc *p = myproc();  // Get the current process
+    if (!p) return -1;
     // Calculate the number of virtual pages
     int num_pages = PGROUNDUP(p->sz) / PGSIZE;  // Round up to account for partial pages
     // Add 1 to count the stack guard page
@@ -37,7 +38,7 @@ int sys_mmap(void) {
 
     // Increase the virtual address space without allocating physical memory
     p->sz = newsz;
-    
+
     return oldsz;  // Return the starting address of the newly added memory region
 }
 
