@@ -37,7 +37,7 @@ int sys_mmap(void) {
 
     // Increase the virtual address space without allocating physical memory
     p->sz = newsz;
-
+    
     return oldsz;  // Return the starting address of the newly added memory region
 }
 

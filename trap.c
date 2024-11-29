@@ -84,7 +84,7 @@ trap(struct trapframe *tf)
 
     if(faulting_addr >= p->sz){
       // Faulting address is beyond the process size; invalid memory access
-      cprintf("pid %d %s: trap %d err %d on cpu %d eip 0x%x addr 0x%x--kill proc\n",
+      cprintf("Faulting address is beyond the process size | INVALID MEMORY ACCESS\npid %d %s: trap %d err %d on cpu %d eip 0x%x addr 0x%x--kill proc\n",
               p->pid, p->name, tf->trapno, tf->err, cpuid(), tf->eip, faulting_addr);
       p->killed = 1;
       break;
@@ -103,7 +103,6 @@ trap(struct trapframe *tf)
     // Update the page table and switch to the updated one
     switchuvm(p);
 
-    // Page fault handled successfully; return to user process
     return;
   }
 
