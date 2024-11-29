@@ -11,6 +11,7 @@ int
 sys_numpp(void)
 {
     struct proc *curproc = myproc();
+    if (!curproc) return -1;
     return numpp(curproc); // Call the `numpp` function with the current process
 }
 int sys_numvp(void) {
